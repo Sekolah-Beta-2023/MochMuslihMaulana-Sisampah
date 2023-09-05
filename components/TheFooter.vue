@@ -9,7 +9,7 @@
         <!-- Left -->
         <div class="me-5 d-none d-lg-block">
           <span
-            >Berikut profil singkat dan informasi sosial media pembuat situs web
+            >Berikut profil singkat dan informasi sosial media situs web
             ini:</span
           >
         </div>
@@ -17,17 +17,16 @@
 
         <!-- Right -->
         <div>
-          <a href="facebook.com/muslih3m" class="me-4 text-reset">
+          <a href="https://facebook.com/sisampah.id" class="me-4 text-reset">
             <i class="fab fa-facebook-f"></i>
           </a>
-          <a href="twitter.com/muslih_m3" class="me-4 text-reset">
-            <i class="fab fa-twitter"></i>
-          </a>
 
-          <a href="instagram.com/muslih_m3" class="me-4 text-reset">
-            <i class="fab fa-instagram"></i>
+          <a href="https://instagram.com/sisampah.id" class="me-4 text-reset">
+            <i class="fab fa-instagram"></i> </a
+          ><a href="https://tiktok.com/@sisampah.id" class="me-4 text-reset">
+            <i class="fab fa-tiktok"></i>
           </a>
-          <a href="linkedin.com/in/muslihm3" class="me-4 text-reset">
+          <a href="https://linkedin.com/in/muslihm3" class="me-4 text-reset">
             <i class="fab fa-linkedin"></i>
           </a>
           <a href="https://github.com/muslihm3" class="me-4 text-reset">
@@ -53,8 +52,7 @@
                 sisampah memiliki tujuan utama untuk mengurangi dampak negatif
                 sampah terhadap lingkungan, mendorong daur ulang dan penggunaan
                 kembali bahan-bahan, serta mengurangi volume sampah yang
-                mencemari. Situs ini di buat oleh Moch Muslih Maulana asal dari
-                Kota Batang, Jawa Tengah
+                mencemari.
               </p>
             </div>
             <!-- Grid column -->
