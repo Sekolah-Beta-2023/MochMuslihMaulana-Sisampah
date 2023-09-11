@@ -20,7 +20,6 @@
           <a href="https://facebook.com/sisampah.id" class="me-4 text-reset">
             <i class="fab fa-facebook-f"></i>
           </a>
-
           <a href="https://instagram.com/sisampah.id" class="me-4 text-reset">
             <i class="fab fa-instagram"></i> </a
           ><a href="https://tiktok.com/@sisampah.id" class="me-4 text-reset">
@@ -39,7 +38,7 @@
 
       <!-- Section: Links  -->
       <section class="">
-        <div class="container text-center text-md-start mt-5">
+        <div class="container text-left text-md-start mt-5">
           <!-- Grid row -->
           <div class="row mt-3">
             <!-- Grid column -->
@@ -67,7 +66,7 @@
               <!-- Links -->
               <h6 class="text-uppercase fw-bold mb-4">Menu</h6>
               <p>
-                <a href="#!" class="text-reset">Home</a>
+                <a href="/" class="text-reset">Home</a>
               </p>
               <p>
                 <a href="#!" class="text-reset">About</a>

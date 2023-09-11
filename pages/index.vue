@@ -1,38 +1,50 @@
 <template>
-  <div class="py-4">
+  <div class="py-4 mt-5">
     <div class="container">
-      <div class="title border-bottom">
+      <div class="title">
         <h5>Setor Sampah</h5>
       </div>
 
       <div class="list-sampah">
-        <div class="input-group m-3 center">
-          <div class="form-outline">
-            <input
-              v-model="searchQuery"
-              type="text"
-              class="form-control"
-              placeholder="Search..."
-            />
+        <div class="row mb-3 mt-3">
+          <div class="col">
+            <div class="form-outline">
+              <input
+                v-model="searchQuery"
+                type="text"
+                class="form-control"
+                placeholder="Search..."
+              />
+            </div>
           </div>
-          <b-dropdown variant="success">
-            <template #button-content> Kategori </template>
-            <b-dropdown-item @click="setCategory('Organik')"
-              >Organik</b-dropdown-item
-            >
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="setCategory('Plastik')"
-              >Plastik</b-dropdown-item
-            >
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="setCategory('Kertas')"
-              >Kertas</b-dropdown-item
-            >
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="setCategory('Kaca')">Kaca</b-dropdown-item>
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="setCategory('B3')">B3</b-dropdown-item>
-          </b-dropdown>
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-append">
+                <b-dropdown variant="success">
+                  <template #button-content> Kategori </template>
+                  <b-dropdown-item @click="setCategory('Organik')"
+                    >Organik</b-dropdown-item
+                  >
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item @click="setCategory('Plastik')"
+                    >Plastik</b-dropdown-item
+                  >
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item @click="setCategory('Kertas')"
+                    >Kertas</b-dropdown-item
+                  >
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item @click="setCategory('Kaca')"
+                    >Kaca</b-dropdown-item
+                  >
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item @click="setCategory('B3')"
+                    >B3</b-dropdown-item
+                  >
+                </b-dropdown>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
           <CardItem
