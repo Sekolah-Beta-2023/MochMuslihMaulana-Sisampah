@@ -52,7 +52,6 @@
             :key="index"
             :trash="item"
             :editable="false"
-            @setor="addToSetorTrash"
           />
         </div>
         <div class="mb-5 mt-5 border-bottom"></div>
@@ -131,6 +130,9 @@ export default {
   methods: {
     setCategory(selectedCategory) {
       this.category = selectedCategory
+    },
+    addToSetorTrash(item) {
+      this.setorTrash.push(item)
     },
   },
 }
