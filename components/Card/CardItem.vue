@@ -35,7 +35,13 @@
             ></textarea>
           </div>
           <div class="button-wrapper d-flex">
-            <button type="submit" class="btn btn-primary me-2">Setor</button>
+            <button
+              type="submit"
+              class="btn btn-primary me-2"
+              @click="addToSetorTrash(trash, berat, keterangan)"
+            >
+              Setor
+            </button>
             <button class="btn btn-outline-secondary" @click="closeForm">
               Cancel
             </button>
@@ -70,6 +76,10 @@ export default {
       this.showForm = false
       this.berat = '' // Membersihkan berat setelah form ditutup
       this.keterangan = '' // Membersihkan keterangan setelah form ditutup
+    },
+    addToSetorTrash(trash) {
+      // Emit event dengan data sampah
+      this.$emit('add-to-setor', trash)
     },
     submitSetorForm() {
       // Pastikan ada berat dan keterangan yang diisi

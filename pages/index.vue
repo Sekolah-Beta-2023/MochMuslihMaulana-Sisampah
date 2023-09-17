@@ -51,7 +51,7 @@
             v-for="(item, index) in resultQuery"
             :key="index"
             :trash="item"
-            :editable="false"
+            @add-to-setor="addToSetorTrash(item, berat, keterangan)"
           />
         </div>
         <div class="mb-5 mt-5 border-bottom"></div>
@@ -59,13 +59,15 @@
           <h5>Sampah yang akan di setor :</h5>
         </div>
         <div class="row mb-3 mt-3 align-items-center">
-          <div v-for="(item, index) in setorTrash" :key="index" class="col">
-            <!-- Tampilkan data sampah yang akan disetor di sini -->
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">{{ item.name }}</h5>
-                <p class="card-text">Berat: {{ item.berat }} kg</p>
-                <p class="card-text">Keterangan: {{ item.keterangan }}</p>
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div v-for="(item, index) in setorTrash" :key="index" class="col">
+              <!-- Tampilkan data sampah yang akan disetor di sini -->
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="card-text">Berat: {{ item.berat }} kg</p>
+                  <p class="card-text">Keterangan: {{ item.keterangan }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -131,8 +133,14 @@ export default {
     setCategory(selectedCategory) {
       this.category = selectedCategory
     },
-    addToSetorTrash(item) {
-      this.setorTrash.push(item)
+
+    addToSetorTrash(trash, berat, keterangan) {
+      const setorTrashItem = {
+        name: trash.name,
+        berat,
+        keterangan,
+      }
+      this.setorTrash.push(setorTrashItem)
     },
   },
 }
