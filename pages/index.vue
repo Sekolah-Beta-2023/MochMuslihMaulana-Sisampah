@@ -6,7 +6,7 @@
       </div>
 
       <div class="list-sampah">
-        <div class="row mb-3 mt-3">
+        <div class="row mb-3 mt-3 align-items-center">
           <div class="col">
             <div class="form-outline">
               <input
@@ -51,7 +51,25 @@
             v-for="(item, index) in resultQuery"
             :key="index"
             :trash="item"
+            :editable="false"
+            @setor="addToSetorTrash"
           />
+        </div>
+        <div class="mb-5 mt-5 border-bottom"></div>
+        <div class="title mb-3 mt-3">
+          <h5>Sampah yang akan di setor :</h5>
+        </div>
+        <div class="row mb-3 mt-3 align-items-center">
+          <div v-for="(item, index) in setorTrash" :key="index" class="col">
+            <!-- Tampilkan data sampah yang akan disetor di sini -->
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.name }}</h5>
+                <p class="card-text">Berat: {{ item.berat }} kg</p>
+                <p class="card-text">Keterangan: {{ item.keterangan }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -86,6 +104,7 @@ export default {
           showForm: false,
         },
       ],
+      setorTrash: [],
     }
   },
   computed: {
@@ -112,6 +131,9 @@ export default {
   methods: {
     setCategory(selectedCategory) {
       this.category = selectedCategory
+    },
+    addToSetorTrash(item) {
+      this.setorTrash.push(item)
     },
   },
 }
