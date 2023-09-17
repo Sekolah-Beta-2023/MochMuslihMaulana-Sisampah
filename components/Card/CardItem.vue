@@ -77,9 +77,9 @@ export default {
       this.berat = '' // Membersihkan berat setelah form ditutup
       this.keterangan = '' // Membersihkan keterangan setelah form ditutup
     },
-    addToSetorTrash(trash) {
+    addToSetorTrash(trash, berat, keterangan) {
       // Emit event dengan data sampah
-      this.$emit('add-to-setor', trash)
+      this.$emit('add-to-setor', trash, berat, keterangan)
     },
     submitSetorForm() {
       // Pastikan ada berat dan keterangan yang diisi
