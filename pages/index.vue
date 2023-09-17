@@ -132,9 +132,6 @@ export default {
     setCategory(selectedCategory) {
       this.category = selectedCategory
     },
-    addToSetorTrash(item) {
-      this.setorTrash.push(item)
-    },
   },
 }
 </script>
