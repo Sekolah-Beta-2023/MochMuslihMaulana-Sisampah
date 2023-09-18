@@ -35,13 +35,7 @@
             ></textarea>
           </div>
           <div class="button-wrapper d-flex">
-            <button
-              type="submit"
-              class="btn btn-primary me-2"
-              @click="addToSetorTrash(trash, berat, keterangan)"
-            >
-              Setor
-            </button>
+            <button type="submit" class="btn btn-primary me-2">Setor</button>
             <button class="btn btn-outline-secondary" @click="closeForm">
               Cancel
             </button>
@@ -77,24 +71,20 @@ export default {
       this.berat = '' // Membersihkan berat setelah form ditutup
       this.keterangan = '' // Membersihkan keterangan setelah form ditutup
     },
-    addToSetorTrash(trash, berat, keterangan) {
-      // Emit event dengan data sampah
-      this.$emit('add-to-setor', trash, berat, keterangan)
-    },
+
     submitSetorForm() {
-      // Pastikan ada berat dan keterangan yang diisi
       if (this.berat && this.keterangan) {
-        // Buat objek baru untuk data sampah yang akan disetor
         const setorTrashItem = {
           name: this.trash.name,
           berat: this.berat,
           keterangan: this.keterangan,
         }
-
-        // Tambahkan data sampah yang akan disetor ke dalam array setorTrash
-        this.setorTrash.push(setorTrashItem)
-
-        // Setelah berhasil menambahkan, tutup form dan bersihkan data form
+        this.$emit(
+          'addToSetor',
+          setorTrashItem,
+          setorTrashItem.berat,
+          setorTrashItem.keterangan
+        ) // Emit event dengan nama yang benar
         this.closeForm()
       } else {
         alert('Mohon isi berat dan keterangan terlebih dahulu.')

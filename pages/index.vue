@@ -51,7 +51,7 @@
             v-for="(item, index) in resultQuery"
             :key="index"
             :trash="item"
-            @add-to-setor="addToSetorTrash(item, berat, keterangan)"
+            @addToSetor="addToSetorTrash"
           />
         </div>
         <div class="mb-5 mt-5 border-bottom"></div>
