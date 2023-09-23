@@ -59,7 +59,6 @@ export default {
       showForm: false,
       berat: '', // Data berat dari form
       keterangan: '', // Data keterangan dari form
-      setorTrash: [], // Definisikan array setorTrash di sini
     }
   },
   methods: {

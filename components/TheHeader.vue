@@ -39,6 +39,9 @@
             <li class="nav-item">
               <a class="nav-link" href="#">Mitra</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/artikel">Artikel</a>
+            </li>
           </ul>
           <div class="vr"></div>
           <div class="container">

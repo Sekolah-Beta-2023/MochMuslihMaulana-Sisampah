@@ -72,7 +72,10 @@
                 <a href="#!" class="text-reset">About</a>
               </p>
               <p>
-                <a href="#!" class="text-reset">Contact</a>
+                <a href="#!" class="text-reset">Mitra</a>
+              </p>
+              <p>
+                <a href="/artikel" class="text-reset">Artikel</a>
               </p>
             </div>
             <!-- Grid column -->
