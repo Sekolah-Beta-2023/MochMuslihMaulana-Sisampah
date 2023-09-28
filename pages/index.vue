@@ -22,25 +22,13 @@
               <div class="input-group-append">
                 <b-dropdown variant="success">
                   <template #button-content> Kategori </template>
-                  <b-dropdown-item @click="setCategory('Organik')"
-                    >Organik</b-dropdown-item
+                  <b-dropdown-item
+                    v-for="(category, index) in $store.state.trash.categories"
+                    :key="index"
+                    @click="setCategory(category)"
                   >
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item @click="setCategory('Plastik')"
-                    >Plastik</b-dropdown-item
-                  >
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item @click="setCategory('Kertas')"
-                    >Kertas</b-dropdown-item
-                  >
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item @click="setCategory('Kaca')"
-                    >Kaca</b-dropdown-item
-                  >
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item @click="setCategory('B3')"
-                    >B3</b-dropdown-item
-                  >
+                    {{ category }}
+                  </b-dropdown-item>
                 </b-dropdown>
               </div>
             </div>
@@ -90,25 +78,18 @@ export default {
   data() {
     return {
       searchQuery: '',
-      category: '',
-      trash: [
-        {
-          name: 'Botol Plastik',
-          description: 'ini keterangan dari sampah botol plastik',
-          category: 'Plastik',
-          showForm: false,
-        },
-        {
-          name: 'Botol Kaca',
-          description: 'ini keterangan dari sampah botol kaca',
-          category: 'Kaca',
-          showForm: false,
-        },
-      ],
+      selectedCategory: [],
       setorTrash: [],
     }
   },
+  async fetch() {
+    await this.$store.dispatch('trash/fetchTrash')
+  },
   computed: {
+    trash() {
+      return this.$store.state.trash.trash
+    },
+
     resultQuery() {
       let filteredTrash = this.trash
 
@@ -120,18 +101,19 @@ export default {
         })
       }
 
-      if (this.category) {
+      if (this.selectedCategory && this.selectedCategory.length > 0) {
         filteredTrash = filteredTrash.filter((item) => {
-          return item.category === this.category
+          return this.selectedCategory.includes(item.category)
         })
       }
 
       return filteredTrash
     },
   },
+
   methods: {
     setCategory(selectedCategory) {
-      this.category = selectedCategory
+      this.selectedCategory = selectedCategory
     },
 
     addToSetorTrash(trash, berat, keterangan) {

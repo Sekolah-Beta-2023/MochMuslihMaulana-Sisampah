@@ -83,7 +83,7 @@ export default {
           setorTrashItem,
           setorTrashItem.berat,
           setorTrashItem.keterangan
-        ) // Emit event dengan nama yang benar
+        )
         this.closeForm()
       } else {
         alert('Mohon isi berat dan keterangan terlebih dahulu.')

@@ -2,7 +2,10 @@
   <div class="py-4 mt-5">
     <div class="container">
       <div class="title mt-5 mb-3 text-center">
-        <h2>{{ article.title }}</h2>
+        <router-link to="/artikel">
+          <button class="btn btn-secondary mb-3">Kembali</button>
+        </router-link>
+        <h1>{{ article.title }}</h1>
       </div>
 
       <div class="row mb-3 align-items-center">
@@ -10,7 +13,7 @@
           <img :src="article.img" :alt="article.title" class="img-fluid" />
           <p class="card-text mt-3">{{ article.content }}</p>
         </div>
-        <div v-else>Artikel tidak ditemukan.</div>
+        <div v-else>Loading...</div>
       </div>
     </div>
   </div>
@@ -51,14 +54,14 @@ export default {
     },
   },
   created() {
-    const judulArtikel = this.$route.params.judulArtikel
+    const judulArtikel = this.$route.params.judulArtikel.toLowerCase()
     this.article = this.articles.find(
       (article) => this.cleanUrl(article.title) === judulArtikel
     )
   },
   methods: {
     cleanUrl(title) {
-      return title.toLowerCase().replace(/ /g, '-')
+      return encodeURIComponent(title.toLowerCase().replace(/ /g, '-'))
     },
   },
 }

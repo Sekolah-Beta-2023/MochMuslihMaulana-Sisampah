@@ -19,7 +19,6 @@
                   />
                 </div>
                 <h5 class="card-title mt-3">{{ article.title }}</h5>
-                <!-- <p class="card-text">{{ article.content | slice(0, 5) }}...</p> -->
                 <p class="card-text">
                   {{ truncateText(article.content, 100) }}
                 </p>
@@ -70,8 +69,7 @@ export default {
   },
   methods: {
     cleanUrl(title) {
-      // Mengubah judul artikel menjadi string URL yang bersih
-      return title.toLowerCase().replace(/ /g, '-')
+      return encodeURIComponent(title.toLowerCase().replace(/ /g, '-'))
     },
     // Memotong Text Content artikel menjadi pendek
     truncateText(text, length) {
