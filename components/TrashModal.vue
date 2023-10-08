@@ -150,7 +150,7 @@ export default {
       console.log('Edit Trash method called.')
       console.log('Data in editTrash method:', this.editedTrash)
       // Panggil aksi untuk mengedit sampah ke store atau API
-      this.$store.dispatch('trash/editTrash', {
+      this.$store.dispatch('trash/fetchTrash', {
         id: this.editedTrash.id,
         data: this.editedTrash,
       })
@@ -165,7 +165,7 @@ export default {
     deleteTrash() {
       console.log('Data in deleteTrash method:', this.deleteTrash)
       // Panggil aksi untuk menghapus sampah ke store atau API
-      this.$store.dispatch('trash/deleteTrash', this.deleteTrash.id)
+      this.$store.dispatch('trash/fetchTrash', this.deleteTrash.id)
       // Reset form dan tutup modal
       this.resetForm('deleteTrashModal-' + this.deleteTrash.id)
     },
