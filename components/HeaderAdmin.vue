@@ -31,16 +31,16 @@
         >
           <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="user/"
+              <a class="nav-link active" aria-current="page" href="/admin"
                 >Home</a
               >
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="user/cart">Cart</a>
+              <a class="nav-link" href="/admin/trash">Trash</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="user/profile">Profile</a>
+              <a class="nav-link" href="/admin/category">Category</a>
             </li>
           </ul>
           <div class="vr"></div>

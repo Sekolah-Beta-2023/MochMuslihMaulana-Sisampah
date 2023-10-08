@@ -73,7 +73,7 @@ export default {
     CardItem,
   },
   layout(context) {
-    return 'custom'
+    return 'user'
   },
   data() {
     return {

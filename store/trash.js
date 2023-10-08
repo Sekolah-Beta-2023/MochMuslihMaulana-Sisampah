@@ -10,6 +10,14 @@ export const mutations = {
   SET_CATEGORIES(state, categories) {
     state.categories = categories
   },
+  UPDATE_TRASH(state, { id, data }) {
+    // Cari indeks sampah yang sesuai
+    const index = state.trash.findIndex((trash) => trash.id === id)
+    if (index !== -1) {
+      // Update data sampah dengan data baru
+      state.trash.splice(index, 1, { ...state.trash[index], ...data })
+    }
+  },
 }
 
 export const actions = {
