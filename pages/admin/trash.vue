@@ -45,7 +45,9 @@
                         v-for="(trash, index) in $store.state.trash.trash"
                         :key="trash.id"
                       >
-                        <td>{{ index + 1 }}</td>
+                        <td class="align-middle text-center">
+                          {{ index + 1 }}
+                        </td>
                         <td>
                           <img
                             :src="trash.image"
@@ -96,7 +98,11 @@
     <!-- End of Page-->
 
     <!-- Include TrashModal.vue component -->
-    <TrashModal />
+    <TrashModal
+      :edited-trash="editedTrash"
+      :delete-trash="deleteTrash"
+      :categories="categories"
+    />
   </div>
 </template>
 
@@ -108,8 +114,16 @@ export default {
   layout(context) {
     return 'admin'
   },
+
   data() {
     return {
+      categories: [],
+      newTrash: {
+        image: null,
+        name: '',
+        description: '',
+        category: '',
+      },
       editedTrash: {
         id: null,
         image: null,
@@ -119,40 +133,57 @@ export default {
       },
       deleteTrash: {
         id: null,
-        // tambahkan properti lain jika diperlukan
+        image: null,
+        name: '',
       },
     }
   },
 
   async fetch() {
     await this.$store.dispatch('trash/fetchTrash')
+    await this.$store.dispatch('trash/fetchCategories')
+    this.trash = this.$store.state.trash.trash
+    this.categories = this.$store.state.trash.categories
   },
 
-  mounted() {},
   methods: {
     addTrashModal() {
+      console.log('Metode addTrash dijalankan')
+      console.log('Selected Category:', this.newTrash.category)
+      this.categories = this.$store.state.trash.categories
       this.$bvModal.show('addTrashModal')
     },
     editTrashModal(trash) {
       console.log('Clicked Trash:', trash)
-      this.editedTrash.id = trash.id
-      console.log('Edited Trash ID:', this.editedTrash.id.toString())
 
-      this.editedTrash.image = trash.image
+      this.editedTrash.id = trash.id
+      this.editedTrash.image = trash.image || null // Menambahkan nilai default atau null
       this.editedTrash.name = trash.name
       this.editedTrash.description = trash.description
       this.editedTrash.category = trash.category
+      console.log('Edited Trash After Changes:', this.editedTrash)
 
-      console.log('After setting editedTrash:', this.editedTrash)
+      // Pastikan bahwa id tidak null
+      if (trash && trash.id !== null && trash.id !== undefined) {
+        this.editedTrash.id = trash.id
+        console.log('Setting editedTrash in editTrashModal:', this.editedTrash)
 
-      this.$bvModal.show('editTrashModal-' + this.editedTrash.id.toString())
-      console.log('After showing modal')
+        this.$bvModal.show('editTrashModal')
+      } else {
+        console.error('Invalid Trash ID')
+      }
     },
 
     deleteTrashModal(trash) {
-      this.deleteTrash.id = trash.id
-      console.log('Delete Trash ID:', this.deleteTrash.id)
-      this.$bvModal.show('deleteTrashModal-' + this.deleteTrash.id.toString())
+      if (trash && trash.id !== null && trash.id !== undefined) {
+        this.deleteTrash.id = trash.id
+        this.deleteTrash.image = trash.image || null // Menambahkan nilai default atau null
+        this.deleteTrash.name = trash.name
+        console.log('Delete Trash ID:', this.deleteTrash.id)
+        this.$bvModal.show('deleteTrashModal')
+      } else {
+        console.error('Invalid Trash ID')
+      }
     },
   },
 }

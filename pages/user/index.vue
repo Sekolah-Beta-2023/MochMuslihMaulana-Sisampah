@@ -25,9 +25,9 @@
                   <b-dropdown-item
                     v-for="(category, index) in $store.state.trash.categories"
                     :key="index"
-                    @click="setCategory(category)"
+                    @click="setCategory(category.name)"
                   >
-                    {{ category }}
+                    {{ category.name }}
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
@@ -84,10 +84,14 @@ export default {
   },
   async fetch() {
     await this.$store.dispatch('trash/fetchTrash')
+    await this.$store.dispatch('trash/fetchCategories')
   },
   computed: {
     trash() {
       return this.$store.state.trash.trash
+    },
+    categories() {
+      return this.$store.state.trash.categories
     },
 
     resultQuery() {

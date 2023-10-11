@@ -11,7 +11,7 @@
             <div
               class="d-sm-flex align-items-center justify-content-between mb-4"
             >
-              <h1 class="h3 mb-0 text-gray-800">Setoran Sampah</h1>
+              <h1 class="h3 mb-0 text-gray-800">Kategori Sampah</h1>
             </div>
             <!-- DataTales-->
             <div class="card shadow mb-4">
@@ -43,42 +43,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Edinburgh</td>
-                        <td>61</td>
+                      <tr
+                        v-for="(category, index) in $store.state.trash
+                          .categories"
+                        :key="category.name"
+                      >
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ category.name }}</td>
                         <td>
-                          <a
-                            href="detailcustomer.php?id=<?= $idc; ?>"
-                            class="btn btn-info"
-                            >View</a
-                          >
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-toggle="modal"
-                            data-target="#edit<?= $idc; ?>"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            data-toggle="modal"
-                            data-target="#hapus<?= $idc; ?>"
-                          >
-                            Hapus
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>
-                          <a
-                            href="detailcustomer.php?id=<?= $idc; ?>"
-                            class="btn btn-info"
-                            >View</a
-                          >
                           <button
                             type="button"
                             class="btn btn-primary"
@@ -117,6 +89,18 @@
 export default {
   layout(context) {
     return 'admin'
+  },
+  data() {
+    return {
+      categories: [],
+    }
+  },
+  async fetch() {
+    await this.$store.dispatch('trash/fetchCategories')
+    this.categories = this.$store.state.trash.categories
+
+    // Tambahkan log untuk memeriksa isi kategori
+    console.log('Categories:', this.categories)
   },
   mounted() {},
 }

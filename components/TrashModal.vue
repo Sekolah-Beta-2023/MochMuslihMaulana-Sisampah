@@ -35,11 +35,17 @@
         <br />
 
         <b-form-group label="Kategori Sampah" label-for="kategoriSampah">
-          <b-form-input
+          <b-form-select
             id="kategoriSampah"
             v-model="newTrash.category"
+            :options="
+              categories.map((category) => ({
+                value: category.id,
+                text: category.name,
+              }))
+            "
             required
-          ></b-form-input>
+          ></b-form-select>
         </b-form-group>
         <br />
         <!-- Tombol untuk menyimpan sampah -->
@@ -49,8 +55,8 @@
 
     <!-- Modal Edit Sampah -->
     <b-modal
-      :id="'editTrashModal-' + editedTrash.id"
-      :title="`Edit Sampah ${editedTrash.id}`"
+      id="editTrashModal"
+      :title="`Edit Sampah ${editedTrash.name}`"
       hide-footer
     >
       <!-- Form untuk mengedit sampah -->
@@ -58,7 +64,7 @@
         <b-form-group label="Foto Sampah" label-for="editImageSampah">
           <b-form-file
             id="editImageSampah"
-            v-model="editedTrash.image"
+            v-model="newEditedTrash.image"
             accept="image/*"
           ></b-form-file>
         </b-form-group>
@@ -67,7 +73,7 @@
         <b-form-group label="Nama Sampah" label-for="editNamaSampah">
           <b-form-input
             id="editNamaSampah"
-            v-model="editedTrash.name"
+            v-model="newEditedTrash.name"
             required
           ></b-form-input>
         </b-form-group>
@@ -79,7 +85,7 @@
         >
           <b-form-textarea
             id="editDescriptionSampah"
-            v-model="editedTrash.description"
+            v-model="newEditedTrash.description"
             required
           ></b-form-textarea>
         </b-form-group>
@@ -88,7 +94,7 @@
         <b-form-group label="Kategori Sampah" label-for="editKategoriSampah">
           <b-form-input
             id="editKategoriSampah"
-            v-model="editedTrash.category"
+            v-model="newEditedTrash.category"
             required
           ></b-form-input>
         </b-form-group>
@@ -99,13 +105,9 @@
     </b-modal>
 
     <!-- Modal Delete Sampah -->
-    <b-modal
-      :id="'deleteTrashModal-' + deleteTrash.id"
-      title="Hapus Sampah"
-      hide-footer
-    >
+    <b-modal :id="'deleteTrashModal'" title="Hapus Sampah" hide-footer>
       <div class="modal-body">
-        Apakah yakin untuk menghapus {{ deleteTrash.id }}? ?
+        Apakah yakin untuk menghapus {{ deleteTrash.name }} ?
       </div>
 
       <!-- Tombol untuk menyimpan perubahan sampah -->
@@ -116,6 +118,33 @@
 
 <script>
 export default {
+  props: {
+    categories: {
+      type: Array,
+      default: () => [],
+    },
+    editedTrash: {
+      type: Object,
+      default: () => ({
+        id: null,
+        image: null,
+        name: '',
+        description: '',
+        category: '',
+      }),
+    },
+
+    deleteTrash: {
+      type: Object,
+      default: () => ({
+        id: null,
+        image: null,
+        name: '',
+        description: '',
+        category: '',
+      }),
+    },
+  },
   data() {
     return {
       newTrash: {
@@ -124,8 +153,7 @@ export default {
         description: '',
         category: '',
       },
-      editedTrash: {
-        id: null,
+      newEditedTrash: {
         image: null,
         name: '',
         description: '',
@@ -134,40 +162,64 @@ export default {
     }
   },
   mounted() {
-    console.log('TrashModal mounted. Edited Trash:', this.editedTrash)
+    if (this.editedTrash) {
+      this.newEditedTrash = {
+        image: this.editedTrash.image || null,
+        name: this.editedTrash.name,
+        description: this.editedTrash.description,
+        category: this.editedTrash.category,
+      }
+    } else {
+      console.error('Invalid editedTrash data')
+    }
   },
   methods: {
-    addTrash() {
-      console.log('Data yang akan disimpan:', this.newTrash)
-      // Panggil aksi untuk menambah sampah ke store atau API
-      this.$store.dispatch('trash/addTrash', this.newTrash)
+    async addTrash() {
+      try {
+        // Membuat objek FormData
+        const formData = new FormData()
+        formData.append('name', this.newTrash.name)
+        formData.append('description', this.newTrash.description)
 
-      // Reset form
-      this.resetForm('addTrashModal')
-    },
+        // Pastikan bahwa this.newTrash.category tidak null atau undefined
+        if (this.newTrash.category) {
+          formData.append('category', JSON.stringify(this.newTrash.category))
+        }
 
-    editTrash() {
-      console.log('Edit Trash method called.')
-      console.log('Data in editTrash method:', this.editedTrash)
-      // Panggil aksi untuk mengedit sampah ke store atau API
-      this.$store.dispatch('trash/fetchTrash', {
-        id: this.editedTrash.id,
-        data: this.editedTrash,
-      })
+        // Panggil aksi untuk membuat sampah baru di toko (store)
+        await this.$store.dispatch('trash/createTrash', formData)
 
-      console.log('Trying to show modal...')
-      this.$bvModal.show('editTrashModal-' + this.editedTrash.id.toString())
+        // Reset data sampah baru setelah berhasil disimpan
+        this.newTrash = {
+          name: '',
+          description: '',
+          category: '',
+        }
 
-      // Reset form
-      // this.resetForm('editTrashModal-' + this.editedTrash.id.toString())
-    },
+        // Sembunyikan modal setelah pembuatan sampah baru berhasil
+        this.$bvModal.hide('addTrashModal')
 
-    deleteTrash() {
-      console.log('Data in deleteTrash method:', this.deleteTrash)
-      // Panggil aksi untuk menghapus sampah ke store atau API
-      this.$store.dispatch('trash/fetchTrash', this.deleteTrash.id)
-      // Reset form dan tutup modal
-      this.resetForm('deleteTrashModal-' + this.deleteTrash.id)
+        // Tampilkan pemberitahuan sukses
+        this.$bvToast.toast('Sampah berhasil ditambahkan!', {
+          title: 'Sukses',
+          autoHideDelay: 5000,
+          variant: 'success',
+        })
+      } catch (error) {
+        console.error('Error creating trash:', error)
+
+        if (error.response) {
+          // Tanggapan dari server dengan status selain 2xx
+          console.error('Server responded with:', error.response.data)
+          console.error('Status code:', error.response.status)
+        } else if (error.request) {
+          // Permintaan terkirim tetapi tidak ada tanggapan (mungkin tidak ada koneksi internet)
+          console.error('No response from server:', error.request)
+        } else {
+          // Kesalahan lainnya
+          console.error('Error:', error.message)
+        }
+      }
     },
   },
 }
