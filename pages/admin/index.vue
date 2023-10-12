@@ -15,7 +15,7 @@
             </div>
             <!-- DataTales-->
             <div class="card shadow mb-4">
-              <div class="card-header py-3">
+              <!-- <div class="card-header py-3">
                 <button
                   type="button"
                   class="btn btn-success"
@@ -24,7 +24,7 @@
                 >
                   Setor Sampah
                 </button>
-              </div>
+              </div> -->
               <br />
 
               <div class="card-body">
@@ -45,24 +45,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>
-                          <a
-                            href="detailcustomer.php?id=<?= $idc; ?>"
-                            class="btn btn-info"
-                            >View</a
-                          >
+                      <tr
+                        v-for="(carts, index) in $store.state.trash.carts"
+                        :key="carts.user"
+                      >
+                        <td class="align-middle text-center">
+                          {{ index + 1 }}
                         </td>
-                      </tr>
-                      <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
+                        <td class="align-middle">Parno</td>
+                        <td class="align-middle">Botol Plastik</td>
+                        <td class="align-middle">{{ carts.weight }} Kg</td>
                         <td>
                           <a
                             href="detailcustomer.php?id=<?= $idc; ?>"
@@ -92,6 +84,31 @@ export default {
   layout(context) {
     return 'admin'
   },
-  mounted() {},
+
+  data() {
+    return {
+      // carts: [],
+    }
+  },
+
+  async fetch() {
+    await this.$store.dispatch('trash/fetchTrash')
+    await this.$store.dispatch('trash/fetchCategories')
+    await this.$store.dispatch('trash/fetchCarts')
+
+    this.trash = this.$store.state.trash.trash
+    this.categories = this.$store.state.trash.categories
+    this.carts = this.$store.state.trash.carts
+    console.log('Carts:', this.carts)
+  },
+
+  methods: {
+    addTrashModal() {
+      console.log('Metode addTrash dijalankan')
+      console.log('Selected Category:', this.newTrash.category)
+      this.categories = this.$store.state.trash.categories
+      this.$bvModal.show('addTrashModal')
+    },
+  },
 }
 </script>

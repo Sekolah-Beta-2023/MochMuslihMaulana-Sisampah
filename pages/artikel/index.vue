@@ -20,14 +20,19 @@
                 </div>
                 <h5 class="card-title mt-3">{{ article.title }}</h5>
                 <p class="card-text">
-                  {{ truncateText(article.content, 100) }}
+                  <span
+                    class="d-inline-block text-truncate"
+                    style="max-width: 300px"
+                  >
+                    {{ article.content }}
+                  </span>
                 </p>
                 <p class="card-text"></p>
 
                 <p class="card-text">
-                  <router-link :to="'/artikel/' + cleanUrl(article.title)">
+                  <nuxt-link :to="'/artikel/' + article.id">
                     Baca Selengkapnya
-                  </router-link>
+                  </nuxt-link>
                 </p>
               </div>
             </div>
@@ -41,24 +46,27 @@
 <script>
 export default {
   layout(context) {
-    return 'custom'
+    return 'user'
   },
   data() {
     return {
       articles: [
         {
+          id: '1',
           title: 'Judul Artikel 1',
           content:
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat dolor explicabo sint quos exercitationem fugiat reiciendis assumenda. Ad quia veritatis, dolor odit, voluptas numquam modi porro eius reprehenderit ullam tenetur?',
           img: 'https://images.unsplash.com/photo-1649282806617-c51bb282899c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
         },
         {
+          id: '2',
           title: 'Judul Artikel 2',
           content:
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat dolor explicabo sint quos exercitationem fugiat reiciendis assumenda. Ad quia veritatis, dolor odit, voluptas numquam modi porro eius reprehenderit ullam tenetur?',
           img: 'https://images.unsplash.com/photo-1635732646038-0a1a2fe3f2d6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
         },
         {
+          id: '3',
           title: 'Judul Artikel 3',
           content:
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat dolor explicabo sint quos exercitationem fugiat reiciendis assumenda. Ad quia veritatis, dolor odit, voluptas numquam modi porro eius reprehenderit ullam tenetur?',
@@ -66,18 +74,6 @@ export default {
         },
       ],
     }
-  },
-  methods: {
-    cleanUrl(title) {
-      return encodeURIComponent(title.toLowerCase().replace(/ /g, '-'))
-    },
-    // Memotong Text Content artikel menjadi pendek
-    truncateText(text, length) {
-      if (text && text.length > length) {
-        return text.substring(0, length) + '...'
-      }
-      return text
-    },
   },
 }
 </script>

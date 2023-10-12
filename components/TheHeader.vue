@@ -37,18 +37,15 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="user/cart">Cart</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="user/profile">Profile</a>
+              <a class="nav-link" href="/artikel">Artikel</a>
             </li>
           </ul>
           <div class="vr"></div>
           <div class="container">
-            <button class="btn btn-outline-success me-2" type="button">
-              Login
-            </button>
-            <button class="btn btn-success me-2" type="button">Register</button>
+            <a href="/admin/login" class="btn btn-outline-success me-2"
+              >Login</a
+            >
+            <a href="/user/register" class="btn btn-success me-2">Register</a>
           </div>
         </div>
 

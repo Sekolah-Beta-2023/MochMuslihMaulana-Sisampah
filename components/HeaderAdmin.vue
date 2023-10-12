@@ -37,18 +37,17 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/admin/trash">Trash</a>
+              <a class="nav-link" href="/admin/category">Category</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/admin/category">Category</a>
+              <a class="nav-link" href="/admin/trash">Trash</a>
             </li>
           </ul>
           <div class="vr"></div>
           <div class="container">
-            <button class="btn btn-outline-success me-2" type="button">
-              Login
+            <button class="btn btn-outline-danger me-2" type="button">
+              Log Out
             </button>
-            <button class="btn btn-success me-2" type="button">Register</button>
           </div>
         </div>
 

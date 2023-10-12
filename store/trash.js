@@ -1,6 +1,7 @@
 export const state = () => ({
   trash: [],
   categories: [],
+  carts: [],
 })
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   SET_CATEGORIES(state, categories) {
     state.categories = categories
+  },
+  SET_CARTS(state, carts) {
+    state.carts = carts
   },
   UPDATE_TRASH(state, { id, data }) {
     // Cari indeks sampah yang sesuai
@@ -47,6 +51,20 @@ export const actions = {
       }
     } catch (error) {
       console.error('Error fetching categories:', error)
+    }
+  },
+  async fetchCarts({ commit, state }) {
+    try {
+      const response = await this.$axios.get('rest/v1/carts')
+      console.log('Response from server for carts:', response.data)
+      if (response.status === 200) {
+        commit('SET_CARTS', response.data)
+        console.log('Carts in state:', state.carts)
+      } else {
+        console.error('Failed to fetch carts. Status:', response.status)
+      }
+    } catch (error) {
+      console.error('Error fetching carts:', error)
     }
   },
 

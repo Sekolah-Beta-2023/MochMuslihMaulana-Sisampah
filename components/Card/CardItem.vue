@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!showForm" class="card h-100" @click="openForm">
-      <img src="/image/bottle-plastic.svg" class="card-img-top" alt="" />
+      <img :src="trash.image" class="card-img-top" alt="" />
       <div class="card-body">
         <h5 class="card-title">{{ trash.name }}</h5>
         <p class="card-text">
@@ -11,7 +11,7 @@
     </div>
     <div v-else class="card h-100">
       <form @submit.prevent="submitSetorForm">
-        <img src="/image/bottle-plastic.svg" class="card-img-top" alt="" />
+        <img :src="trash.image" class="card-img-top" alt="" />
         <div class="card-body">
           <div class="mb-3">
             <h5 class="card-title">{{ trash.name }}</h5>
