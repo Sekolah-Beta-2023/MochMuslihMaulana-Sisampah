@@ -18,9 +18,29 @@ export const mutations = {
     // Cari indeks sampah yang sesuai
     const index = state.trash.findIndex((trash) => trash.id === id)
     if (index !== -1) {
-      // Update data sampah dengan data baru
+      // Update data sampah de ngan data baru
       state.trash.splice(index, 1, { ...state.trash[index], ...data })
     }
+  },
+  UPDATE_CATEGORY(state, { name, data }) {
+    // Cari indeks kategori yang sesuai
+    const index = state.categories.findIndex(
+      (category) => category.name === name
+    )
+    if (index !== -1) {
+      // Update data kategori dengan data baru
+      state.categories.splice(index, 1, { ...state.categories[index], ...data })
+    }
+  },
+  DELETE_TRASH(state, payload) {
+    const idToDelete = payload.id
+    state.trash = state.trash.filter((trash) => trash.id !== idToDelete)
+  },
+  DELETE_CATEGORY(state, name) {
+    // Remove the category with the specified name
+    state.categories = state.categories.filter(
+      (category) => category.name !== name
+    )
   },
 }
 
@@ -68,27 +88,38 @@ export const actions = {
     }
   },
 
-  async createTrash({ commit, state }, payload) {
+  async createTrash({ commit, state }, trashData) {
     try {
-      const response = await this.$axios.post('rest/v1/trash', payload.data)
+      const response = await this.$axios.post('rest/v1/trash', trashData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
       if (response.status === 201) {
         // Jika pembuatan data berhasil, perbarui store
         const newTrash = response.data
         commit('SET_TRASH', [...state.trash, newTrash])
-        console.log('Trash in state after create:', state.trash)
+        return { status: 201 } // Mengembalikan status berhasil
       } else {
-        console.error('Failed to create trash. Status:', response.status)
+        console.error('Gagal membuat sampah. Status:', response.status)
+        return { status: response.status } // Mengembalikan status gagal
       }
     } catch (error) {
       console.error('Error creating trash:', error)
+      return { status: error.response.status } // Mengembalikan status server error
     }
   },
   async editTrash({ commit, state }, payload) {
     try {
-      const response = await this.$axios.put(
-        `rest/v1/trash/${payload.id}`,
-        payload.data
+      const response = await this.$axios.patch(
+        ` rest/v1/trash?id=eq.${payload.id}`,
+        payload.data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       )
 
       if (response.status === 200) {
@@ -100,6 +131,79 @@ export const actions = {
       }
     } catch (error) {
       console.error('Error editing trash:', error)
+    }
+  },
+  async deleteTrash({ commit }, id) {
+    try {
+      const response = await this.$axios.delete(`rest/v1/trash?id=eq.${id}`)
+
+      if (response.status === 200) {
+        // Jika penghapusan berhasil, panggil mutation untuk menghapus sampah
+        commit('DELETE_TRASH', id)
+      } else {
+        console.error('Failed to delete trash. Status:', response.status)
+      }
+    } catch (error) {
+      console.error('Error deleting trash:', error)
+    }
+  },
+
+  async createCategory({ commit, state }, newCategory) {
+    try {
+      const response = await this.$axios.post('rest/v1/categories', newCategory)
+      if (response && response.status === 201) {
+        // Jika penambahan berhasil, perbarui state dengan kategori baru
+        commit('SET_CATEGORIES', [...state.categories, response.data])
+        return { status: 201 } // Mengembalikan status berhasil
+      } else {
+        console.error(
+          'Gagal menambah kategori. Status:',
+          response ? response.status : 'Undefined Response'
+        )
+        return { status: response ? response.status : undefined } // Mengembalikan status gagal
+      }
+    } catch (error) {
+      console.error('Error menambah kategori:', error)
+      return { status: error.response ? error.response.status : undefined } // Mengembalikan status server error
+    }
+  },
+  async editCategory({ commit, state }, payload) {
+    try {
+      const response = await this.$axios.patch(
+        `rest/v1/categories?name=eq.${payload.name}`,
+        payload.data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      if (response.status === 200) {
+        // Jika penyuntingan berhasil, perbarui store
+        commit('UPDATE_CATEGORY', { name: payload.name, data: payload.data })
+        console.log('Categories in state after edit:', state.categories)
+      } else {
+        console.error('Failed to edit category. Status:', response.status)
+      }
+    } catch (error) {
+      console.error('Error editing category:', error)
+    }
+  },
+  async deleteCategory({ commit }, name) {
+    try {
+      const response = await this.$axios.delete(
+        `rest/v1/categories?name=eq.${name}`
+      )
+
+      if (response.status === 204) {
+        // If deletion is successful, call mutation to delete the category from the store
+        commit('DELETE_CATEGORY', name)
+      } else {
+        console.error('Failed to delete category. Status:', response.status)
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error)
     }
   },
 }

@@ -63,10 +63,9 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://ljfroyjcwnqpdtclpoam.supabase.co',
+    baseURL: process.env.SUPABASE_API,
     headers: {
-      apikey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqZnJveWpjd25xcGR0Y2xwb2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU2OTc1MDYsImV4cCI6MjAxMTI3MzUwNn0.8rad5GkqJP_nrEjLkF9dcvUWxZniPu6xo4pAbfxkJlo',
+      apikey: process.env.SUPABASE_KEY,
     },
   },
 

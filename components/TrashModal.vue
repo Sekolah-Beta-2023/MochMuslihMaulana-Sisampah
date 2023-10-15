@@ -6,7 +6,7 @@
     <b-modal id="addTrashModal" title="Tambah Sampah" hide-footer>
       <!-- Form untuk menambah sampah -->
       <form @submit.prevent="addTrash">
-        <b-form-group label="Foto Sampah" label-for="imageSampah">
+        <!-- <b-form-group label="Foto Sampah" label-for="imageSampah">
           <b-form-file
             id="imageSampah"
             v-model="newTrash.image"
@@ -14,7 +14,7 @@
             accept="image/*"
           ></b-form-file>
         </b-form-group>
-        <br />
+        <br /> -->
 
         <b-form-group label="Nama Sampah" label-for="namaSampah">
           <b-form-input
@@ -37,10 +37,10 @@
         <b-form-group label="Kategori Sampah" label-for="kategoriSampah">
           <b-form-select
             id="kategoriSampah"
-            v-model="newTrash.category"
+            v-model="newTrash.selectedCategoryIndex"
             :options="
-              categories.map((category) => ({
-                value: category.id,
+              categories.map((category, index) => ({
+                value: index,
                 text: category.name,
               }))
             "
@@ -92,11 +92,17 @@
         <br />
 
         <b-form-group label="Kategori Sampah" label-for="editKategoriSampah">
-          <b-form-input
+          <b-form-select
             id="editKategoriSampah"
-            v-model="newEditedTrash.category"
+            v-model="newEditedTrash.selectedCategoryIndex"
+            :options="
+              categories.map((category, index) => ({
+                value: index,
+                text: category.name,
+              }))
+            "
             required
-          ></b-form-input>
+          ></b-form-select>
         </b-form-group>
         <br />
         <!-- Tombol untuk menyimpan perubahan sampah -->
@@ -111,7 +117,9 @@
       </div>
 
       <!-- Tombol untuk menyimpan perubahan sampah -->
-      <b-button variant="danger" @click="deleteTrash">Hapus</b-button>
+      <b-button variant="danger" @click="confirmDeleteTrash(deleteTrash)"
+        >Hapus</b-button
+      >
     </b-modal>
   </div>
 </template>
@@ -148,7 +156,7 @@ export default {
   data() {
     return {
       newTrash: {
-        image: null,
+        // image: null,
         name: '',
         description: '',
         category: '',
@@ -162,6 +170,7 @@ export default {
     }
   },
   mounted() {
+    console.log('Mounted - trashToDelete:', this.deleteTrash)
     if (this.editedTrash) {
       this.newEditedTrash = {
         image: this.editedTrash.image || null,
@@ -181,19 +190,29 @@ export default {
         formData.append('name', this.newTrash.name)
         formData.append('description', this.newTrash.description)
 
-        // Pastikan bahwa this.newTrash.category tidak null atau undefined
-        if (this.newTrash.category) {
-          formData.append('category', JSON.stringify(this.newTrash.category))
+        // Pastikan bahwa this.newTrash.selectedCategoryIndex tidak null atau undefined
+        if (
+          this.newTrash.selectedCategoryIndex !== null &&
+          this.newTrash.selectedCategoryIndex !== undefined
+        ) {
+          const selectedCategory =
+            this.categories[this.newTrash.selectedCategoryIndex]
+          // Ubah cara menambahkan category ke FormData sesuai dengan kebutuhan server
+          formData.append('category', selectedCategory.name)
         }
 
         // Panggil aksi untuk membuat sampah baru di toko (store)
-        await this.$store.dispatch('trash/createTrash', formData)
+        await this.$store.dispatch('trash/createTrash', {
+          name: this.newTrash.name,
+          description: this.newTrash.description,
+          category: this.categories[this.newTrash.selectedCategoryIndex].name,
+        })
 
         // Reset data sampah baru setelah berhasil disimpan
         this.newTrash = {
           name: '',
           description: '',
-          category: '',
+          selectedCategoryIndex: null,
         }
 
         // Sembunyikan modal setelah pembuatan sampah baru berhasil
@@ -205,20 +224,78 @@ export default {
           autoHideDelay: 5000,
           variant: 'success',
         })
+
+        console.log(
+          'After selecting category:',
+          this.newTrash.selectedCategoryIndex
+        )
       } catch (error) {
         console.error('Error creating trash:', error)
+        // ...
+      }
+    },
+    async editTrash() {
+      try {
+        const response = await this.$axios.patch(
+          `rest/v1/trash?id=eq.${this.editedTrash.id}`,
+          {
+            name: this.newEditedTrash.name,
+            description: this.newEditedTrash.description,
+            category:
+              this.categories[this.newEditedTrash.selectedCategoryIndex].name,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
 
-        if (error.response) {
-          // Tanggapan dari server dengan status selain 2xx
-          console.error('Server responded with:', error.response.data)
-          console.error('Status code:', error.response.status)
-        } else if (error.request) {
-          // Permintaan terkirim tetapi tidak ada tanggapan (mungkin tidak ada koneksi internet)
-          console.error('No response from server:', error.request)
-        } else {
-          // Kesalahan lainnya
-          console.error('Error:', error.message)
+        if (response.status === 200) {
+          // Jika penyuntingan berhasil, perbarui store
+          this.$store.commit('UPDATE_TRASH', {
+            id: this.editedTrash.id,
+            data: this.newEditedTrash,
+          })
         }
+        this.$bvModal.hide('editTrashModal')
+      } catch (error) {}
+    },
+
+    async deletedTrash(id) {
+      try {
+        console.log('Deleting trash with ID:', id)
+
+        if (id !== null) {
+          const response = await this.$axios.delete(`rest/v1/trash?id=eq.${id}`)
+
+          console.log('Delete response:', response)
+
+          if (response.status === 204) {
+            // Jika status 204 (No Content), anggap sebagai berhasil
+            this.$store.commit('DELETE_TRASH', { id })
+            this.$bvModal.hide('deleteTrashModal')
+            this.$bvToast.toast('Sampah berhasil dihapus!', {
+              title: 'Sukses',
+              autoHideDelay: 5000,
+              variant: 'success',
+            })
+          } else {
+            console.error('Gagal menghapus sampah. Status:', response.status)
+          }
+        } else {
+          console.error('ID sampah tidak valid (null)')
+        }
+      } catch (error) {
+        console.error('Error deleting trash:', error)
+      }
+    },
+    confirmDeleteTrash() {
+      // Memastikan bahwa deleteTrash dipanggil hanya jika trashToDelete memiliki ID yang valid
+      if (this.deleteTrash.id !== null) {
+        this.deletedTrash(this.deleteTrash.id)
+      } else {
+        console.error('ID sampah tidak valid ya (null)')
       }
     },
   },

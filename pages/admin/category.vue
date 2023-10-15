@@ -1,3 +1,4 @@
+<!-- Category.vue -->
 <template>
   <div class="py-4 mt-5">
     <div class="container">
@@ -16,14 +17,9 @@
             <!-- DataTales-->
             <div class="card shadow mb-4">
               <div class="card-header py-3">
-                <button
-                  type="button"
-                  class="btn btn-success"
-                  data-toggle="modal"
-                  data-target="#addCategory"
+                <b-button class="btn btn-success" @click="addCategoryModal"
+                  >Tambah Category</b-button
                 >
-                  Tambah Kategory
-                </button>
               </div>
               <br />
 
@@ -49,24 +45,18 @@
                         :key="category.name"
                       >
                         <td>{{ index + 1 }}</td>
-                        <td>{{ category.name }}</td>
+                        <td>{{ category && category.name }}</td>
                         <td>
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-toggle="modal"
-                            data-target="#edit<?= $idc; ?>"
+                          <b-button
+                            class="btn btn-success"
+                            @click="editCategoryModal(category)"
+                            >Edit</b-button
                           >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
+                          <b-button
                             class="btn btn-danger"
-                            data-toggle="modal"
-                            data-target="#hapus<?= $idc; ?>"
+                            @click="deleteCategoryModal(category)"
+                            >Hapus</b-button
                           >
-                            Hapus
-                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -82,26 +72,48 @@
       <!-- End of Content -->
     </div>
     <!-- End of Page-->
+
+    <CategoryModal
+      :edited-category="editedCategory"
+      :delete-category="deleteCategory"
+    />
   </div>
 </template>
 
 <script>
+import CategoryModal from '~/components/CategoryModal.vue'
+
 export default {
+  components: { CategoryModal },
   layout(context) {
     return 'admin'
   },
   data() {
     return {
-      categories: [],
+      addCategory: { name: '' },
+      editedCategory: { name: '' },
+      deleteCategory: { name: '' },
     }
   },
   async fetch() {
     await this.$store.dispatch('trash/fetchCategories')
-    this.categories = this.$store.state.trash.categories
-
-    // Tambahkan log untuk memeriksa isi kategori
-    console.log('Categories:', this.categories)
   },
-  mounted() {},
+  methods: {
+    addCategoryModal(category) {
+      this.addCategory = { ...category }
+      console.log('addCategory:', this.addCategory)
+      this.$bvModal.show('addCategoryModal')
+    },
+    editCategoryModal(category) {
+      this.editedCategory = { ...category }
+      console.log('editedCategory:', this.editedCategory)
+      this.$bvModal.show('editCategoryModal')
+    },
+    deleteCategoryModal(category) {
+      this.deleteCategory = { ...category }
+      console.log('deleteCategory:', this.deleteCategory)
+      this.$bvModal.show('deleteCategoryModal')
+    },
+  },
 }
 </script>

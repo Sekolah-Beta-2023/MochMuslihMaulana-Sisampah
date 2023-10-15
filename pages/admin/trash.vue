@@ -154,19 +154,15 @@ export default {
       this.$bvModal.show('addTrashModal')
     },
     editTrashModal(trash) {
-      console.log('Clicked Trash:', trash)
-
       this.editedTrash.id = trash.id
       this.editedTrash.image = trash.image || null // Menambahkan nilai default atau null
       this.editedTrash.name = trash.name
       this.editedTrash.description = trash.description
       this.editedTrash.category = trash.category
-      console.log('Edited Trash After Changes:', this.editedTrash)
 
       // Pastikan bahwa id tidak null
       if (trash && trash.id !== null && trash.id !== undefined) {
         this.editedTrash.id = trash.id
-        console.log('Setting editedTrash in editTrashModal:', this.editedTrash)
 
         this.$bvModal.show('editTrashModal')
       } else {
@@ -176,10 +172,12 @@ export default {
 
     deleteTrashModal(trash) {
       if (trash && trash.id !== null && trash.id !== undefined) {
+        // Perbarui properti deleteTrash dengan data sampah yang akan dihapus
         this.deleteTrash.id = trash.id
-        this.deleteTrash.image = trash.image || null // Menambahkan nilai default atau null
+        this.deleteTrash.image = trash.image || null
         this.deleteTrash.name = trash.name
-        console.log('Delete Trash ID:', this.deleteTrash.id)
+
+        // Tampilkan modal
         this.$bvModal.show('deleteTrashModal')
       } else {
         console.error('Invalid Trash ID')
