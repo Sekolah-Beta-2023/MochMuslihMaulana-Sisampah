@@ -56,11 +56,7 @@
                         <td class="align-middle">Botol Plastik</td>
                         <td class="align-middle">{{ carts.weight }} Kg</td>
                         <td>
-                          <a
-                            href="detailcustomer.php?id=<?= $idc; ?>"
-                            class="btn btn-info"
-                            >View</a
-                          >
+                          <a href="/admin" class="btn btn-info">View</a>
                         </td>
                       </tr>
                     </tbody>
