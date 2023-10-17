@@ -33,9 +33,13 @@
                   <a class="text-white-50" href="#!">Forgot password?</a>
                 </p>
 
-                <a href="/admin" class="btn btn-outline-light btn-lg px-5"
-                  >Login</a
+                <router-link
+                  to="/admin"
+                  class="btn btn-primary btn-lg px-5"
+                  @click="handleLogin"
                 >
+                  Login
+                </router-link>
 
                 <div
                   class="d-flex justify-content-center text-center mt-4 pt-1"
@@ -55,7 +59,9 @@
               <div>
                 <p class="mb-0">
                   Don't have an account?
-                  <a href="#!" class="text-white-50 fw-bold">Sign Up</a>
+                  <a href="/user/register" class="text-white-50 fw-bold"
+                    >Sign Up</a
+                  >
                 </p>
               </div>
             </div>
@@ -65,3 +71,31 @@
     </div>
   </section>
 </template>
+
+<script>
+import { signIn } from '~/utils/auth'
+
+export default {
+  data() {
+    return {
+      email: '', // Menyimpan nilai email dari formulir
+      password: '', // Menyimpan nilai password dari formulir
+    }
+  },
+  methods: {
+    async handleLogin() {
+      const { email, password } = this // Mendapatkan nilai email dan password dari data komponen
+
+      const { user, error } = await signIn(email, password)
+
+      if (error) {
+        console.error('Login failed:', error.message)
+        // Handle error, misalnya menampilkan pesan kesalahan ke pengguna
+      } else {
+        console.log('Login success:', user)
+        // Redirect atau lakukan tindakan lain setelah login berhasil
+      }
+    },
+  },
+}
+</script>
